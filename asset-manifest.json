@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/CryptoCoin/static/css/main.b621b1a5.css",
-    "main.js": "/CryptoCoin/static/js/main.8cffd820.js",
+    "main.js": "/CryptoCoin/static/js/main.19c3076f.js",
     "index.html": "/CryptoCoin/index.html",
     "main.b621b1a5.css.map": "/CryptoCoin/static/css/main.b621b1a5.css.map",
-    "main.8cffd820.js.map": "/CryptoCoin/static/js/main.8cffd820.js.map"
+    "main.19c3076f.js.map": "/CryptoCoin/static/js/main.19c3076f.js.map"
   },
   "entrypoints": [
     "static/css/main.b621b1a5.css",
-    "static/js/main.8cffd820.js"
+    "static/js/main.19c3076f.js"
   ]
 }
