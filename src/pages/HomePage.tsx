@@ -17,6 +17,7 @@ const ContentPage: React.FC = () => {
 
 
     const handleSearch = async (query: string) => {
+        setSearchQuery(query)
         setLoading(true);
         const data = await fetchCryptos(1, query); // Загружаем данные с учетом поискового запроса
         setCryptos(data); // Обновляем список криптовалют
