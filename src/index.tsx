@@ -7,8 +7,10 @@ import {BrowserRouter, Routes, Route} from "react-router";
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
+
 root.render(
-    <BrowserRouter>
-        <App/>
+
+    <BrowserRouter basename = "/CryptoCoin/">
+        <App  />
     </BrowserRouter>
 );
