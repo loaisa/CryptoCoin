@@ -1,59 +1,68 @@
 import React, { useEffect, useState } from 'react';
 
-import { Spin } from 'antd';
-import axios from "axios";
-import {CryptoCurrency} from "../types/cryptoTypes";
 
-const HomePage: React.FC = () => {
+import {CryptoCurrency} from "../types/cryptoTypes";
+import {fetchCryptos } from "../service/cryptoService";
+import CryptoList from "../components/CryptoList";
+import SearchCrypto from "../components/SearchCrypto";
+import InfiniteScroll from "react-infinite-scroll-component";
+import {Spin} from "antd";
+
+const ContentPage: React.FC = () => {
     const [cryptos, setCryptos] = useState<CryptoCurrency[]>([])
     const [loading, setLoading] = useState<boolean>(true);
+    const [page, setPage] = useState<number>(1)
+    const [hasMore, setHasMore] = useState<boolean>(true);
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
-    const API_URL = 'https://openapiv1.coinstats.app/coins';
-    const API_KEY = 'TfrQ7fy/kjg1rJR8ryqPFTOSF+/PYKZDuX9rXKt8CUk='; // Замените на ваш API-ключ
+
+    const handleSearch = async (query: string) => {
+        setLoading(true);
+        const data = await fetchCryptos(1, query); // Загружаем данные с учетом поискового запроса
+        setCryptos(data); // Обновляем список криптовалют
+        setLoading(false);
+    };
+
+    const loadMoreCryptos = async () => {
+
+        const newCryptos = await fetchCryptos(page, searchQuery);
+        if (newCryptos.length === 0) {
+            setHasMore(false);
+        } else {
+            setCryptos([...cryptos, ...newCryptos]); // Добавляем новые данные к существующим
+            setLoading(false);
+            setPage(page + 1);
+        }
+    };
 
     useEffect(() => {
-        const loadCrypto= async (): Promise<any>=>{
-            const response = await axios.get(API_URL, {
-                headers:{
-                    'X-API-KEY': API_KEY,
-                }
-            })
-            console.log(response.data.result)
-            setCryptos(response.data.result.map((coin: any) => ({
-                id: coin.id,
-                name: coin.name,
-                symbol: coin.symbol,
-                price: coin.price,
-                marketCap: coin.marketCap,
-                volume: coin.volume,
-                priceChange1d: coin.priceChange1d,
-                icon: coin.icon,
-                rank:coin.rank
-            })))
+        const loadCryptos = async ()=>{
+            const data = await fetchCryptos(page, searchQuery);
+            setCryptos(data)
+            setLoading(false)
+            setPage(page + 1)
+
         }
-        setLoading(false)
-        loadCrypto()
+        loadCryptos();
     }, []);
 
     if (loading) {
         return <Spin size="large" />;
     }
-    console.log(cryptos)
     return (
         <div style={{ padding: '24px' }}>
             <h1>Crypto Tracker</h1>
-            {
-                cryptos? <>
-                    {cryptos.map((item)=>
-                        <div>
-                            {item.name}
-                        </div>
-                    )}
-                </>: <p>'Загрузка'</p>
-            }
-
+            <SearchCrypto onSearch={handleSearch}/>
+            <InfiniteScroll
+                dataLength={cryptos.length}
+                next={loadMoreCryptos}
+                hasMore={hasMore}
+                loader={<Spin size="large" />}
+            >
+                <CryptoList item={cryptos} />
+            </InfiniteScroll>
         </div>
     );
 };
 
-export default HomePage;
+export default ContentPage;

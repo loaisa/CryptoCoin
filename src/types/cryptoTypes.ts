@@ -8,5 +8,4 @@ export interface CryptoCurrency{
     rank:number,
     volume:number,
     priceChange1d:number
-
 }

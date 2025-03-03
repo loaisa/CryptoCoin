@@ -1,21 +1,26 @@
 import React from 'react';
 import { Layout } from 'antd';
 import '../src/styles/global.css'
-import AppContent from "./components/AppContent";
+
 import AppHeader from "./components/AppHeader";
-import AppSider from "./components/AppSider";
+import {Route, Routes} from "react-router";
+import AppComponent from "./components/AppComonent";
+import LoginPage from "./pages/LoginPage";
+
 
 
 
 
 const App: React.FC = () => {
     return (
+
+
         <Layout >
             <AppHeader/>
-            <Layout>
-                <AppSider/>
-                <AppContent/>
-            </Layout>
+            <Routes>
+                <Route path='/' element={<AppComponent/>}/>
+                <Route path='login' element={<LoginPage/>}/>
+            </Routes>
         </Layout>
     );
 };
